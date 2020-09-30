@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "rainauth",
+  "version": "${version}",
+  "name": "RainAuth",
+  "description": "An auth mod for fabric.",
+  "authors": [
+    "AmemiyaSigure"
+  ],
+  "contact": {
+    "repo": "https://github.com/AmemiyaSigure/RainAuth"
+  },
+  "license": "MIT",
+  "icon": "assets/rainauth/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cx.rain.mc.fabric.rainauth.RainAuth"
+    ]
+  },
+  "mixins": [
+    "rainauth.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.10.0+build.208",
+    "fabric": "*",
+    "minecraft": "1.16.3",
+    "raincommons": ">=1.0.0"
+  }
+}
