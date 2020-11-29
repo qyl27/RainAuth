@@ -2,20 +2,21 @@ package cx.rain.mc.fabric.rainauth;
 
 import cx.rain.mc.fabric.rainauth.command.Commands;
 import cx.rain.mc.fabric.rainauth.data.ConfigManager;
-import cx.rain.mc.fabric.raincommons.event.callback.entity.player.PlayerJoinedCallback;
-import cx.rain.mc.fabric.raincommons.event.callback.entity.player.PlayerLeavingCallback;
-import cx.rain.mc.fabric.raincommons.event.callback.entity.player.PlayerMoveCallback;
-import cx.rain.mc.fabric.raincommons.event.entity.player.PlayerJoinedEvent;
+import cx.rain.mc.fabric.rainauth.event.callback.PlayerLeaveCallback;
+import cx.rain.mc.fabric.rainauth.event.callback.PlayerLoginCallback;
+import cx.rain.mc.fabric.rainauth.event.callback.PlayerMoveCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.MinecraftDedicatedServer;
+import net.minecraft.server.world.ServerTickScheduler;
 import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.Util;
+import net.minecraft.world.MultiTickScheduler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,28 +47,30 @@ public final class RainAuth implements ModInitializer {
         return configManager;
     }
 
-    public void registerEvents() {
-        // Fixme
-//        PlayerJoinedCallback.EVENT.register(event -> {
-//            sendNotLoginMessage(event.player);
-//            return ActionResult.PASS;
-//        });
-
-        PlayerLeavingCallback.EVENT.register(event -> {
-            if (PlayerLogged.contains(event.player.getUuid())) {
-                PlayerLogged.remove(event.player.getUuid());
-                return ActionResult.SUCCESS;
+    private void registerEvents() {
+        PlayerLoginCallback.EVENT.register(((profile, connection) -> {
+            UUID uuid = profile.getId();
+            if (PlayerLogged.contains(uuid)) {
+                connection.disconnect(new TranslatableText("message.rainauth.same_uuid_logged"));
             }
-            return ActionResult.PASS;
-        });
 
-        PlayerMoveCallback.EVENT.register(event -> {
-            if (!PlayerLogged.contains(event.entity.getUuid())) {
-                //sendNotLoginMessage((PlayerEntity) event.entity);
+            return ActionResult.PASS;
+        }));
+
+        PlayerLeaveCallback.EVENT.register(((profile, connection, reason) -> {
+            UUID uuid = profile.getId();
+            if (PlayerLogged.contains(uuid)) {
+                PlayerLogged.remove(uuid);
+            }
+        }));
+
+        PlayerMoveCallback.EVENT.register(((player, world, direction) -> {
+            if (!PlayerLogged.contains(player.getUuid())) {
+                player.setPos(player.prevX, player.prevY, player.prevZ);
                 return ActionResult.FAIL;
             }
             return ActionResult.PASS;
-        });
+        }));
 
         AttackBlockCallback.EVENT.register((playerEntity, world, hand, blockPos, direction) -> {
             if (!PlayerLogged.contains(playerEntity.getUuid())) {
