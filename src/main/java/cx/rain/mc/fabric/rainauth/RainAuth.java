@@ -7,6 +7,7 @@ import cx.rain.mc.fabric.rainauth.event.callback.PlayerLoginCallback;
 import cx.rain.mc.fabric.rainauth.event.callback.PlayerMoveCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.*;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
@@ -25,21 +26,20 @@ import java.util.List;
 import java.util.UUID;
 
 public final class RainAuth implements ModInitializer {
+    public static final String MODID = "RainAuth";
+
     public static RainAuth INSTANCE;
 
     public List<UUID> PlayerLogged = new ArrayList<>();
 
-    private final Logger log = LogManager.getLogger("RainAuth");
+    private final Logger log = LogManager.getLogger(MODID);
     private final ConfigManager configManager = new ConfigManager();
 
     @Override
     public void onInitialize() {
-        log.info("Enabled.");
-
+        log.info("I am working.");
         INSTANCE = this;
-
         new Commands();
-
         registerEvents();
     }
 
@@ -49,11 +49,7 @@ public final class RainAuth implements ModInitializer {
 
     private void registerEvents() {
         PlayerLoginCallback.EVENT.register(((profile, connection) -> {
-            UUID uuid = profile.getId();
-            if (PlayerLogged.contains(uuid)) {
-                connection.disconnect(new TranslatableText("message.rainauth.same_uuid_logged"));
-            }
-
+            
             return ActionResult.PASS;
         }));
 
