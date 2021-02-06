@@ -18,7 +18,7 @@ public class CommandRegister {
                                 .executes(context -> {
                                     if (context.getSource().getEntity() instanceof PlayerEntity) {
                                         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-                                        ConfigManager data = RainAuth.INSTANCE.getData();
+                                        ConfigManager data = RainAuth.getInstance().getData();
                                         String password = context.getArgument("password", String.class);
                                         String passwordRepeat =
                                                 context.getArgument("repeatPassword", String.class);

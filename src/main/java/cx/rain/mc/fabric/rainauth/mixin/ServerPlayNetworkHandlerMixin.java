@@ -1,12 +1,15 @@
 package cx.rain.mc.fabric.rainauth.mixin;
 
+import cx.rain.mc.fabric.rainauth.event.callback.PlayerCommandCallback;
 import cx.rain.mc.fabric.rainauth.event.callback.PlayerMoveCallback;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +22,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
-    @Inject(method = "onPlayerMove", at = @At("HEAD"), cancellable = true)
+    @Inject(at = @At("HEAD"), method = "onPlayerMove", cancellable = true)
     public void beforeMovePlayer(PlayerMoveC2SPacket packet, CallbackInfo ci) {
         if (PlayerMoveCallback.EVENT.invoker()
                 .accept(player, player.world,
@@ -31,6 +34,15 @@ public abstract class ServerPlayNetworkHandlerMixin {
 
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
                     new EntityPositionS2CPacket(player));
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "executeCommand", cancellable = true)
+    public void beforeExecuteCommand(String input, CallbackInfo ci) {
+        TypedActionResult<String> result = PlayerCommandCallback.EVENT.invoker().accept(input, player);
+        if (result.getResult() == ActionResult.FAIL) {
+            player.sendMessage(new LiteralText(result.getValue()), false);
+            ci.cancel();
         }
     }
 }

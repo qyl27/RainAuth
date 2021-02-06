@@ -1,6 +1,5 @@
 package cx.rain.mc.fabric.rainauth.event.callback;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.network.ClientConnection;

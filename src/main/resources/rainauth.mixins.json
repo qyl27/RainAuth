@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "PlayerManagerMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "ServerPlayerEntityMixin",
+    "packet.ClientSettingsC2SPacketMixin"
   ],
   "client": [
   ],

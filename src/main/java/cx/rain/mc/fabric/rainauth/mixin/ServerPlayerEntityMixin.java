@@ -16,7 +16,8 @@ public abstract class ServerPlayerEntityMixin implements ITranslatable {
 
     @Inject(at = @At("HEAD"), method = "setClientSettings")
     public void beforeSetClientSettings(ClientSettingsC2SPacket packet, CallbackInfo ci) {
-        language = new TranslatableLanguage(((ITranslatablePacket) packet).getLanguage());
+        //language = new TranslatableLanguage(((ITranslatablePacket) packet).getLanguage());
+        language = new TranslatableLanguage("zh_cn");
     }
 
     @Override
