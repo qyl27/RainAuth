@@ -3,13 +3,13 @@
   "minVersion": "0.8",
   "package": "cx.rain.mc.fabric.rainauth.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
+  "server": [
     "PlayerManagerMixin",
     "ServerPlayNetworkHandlerMixin",
     "ServerPlayerEntityMixin",
     "packet.ClientSettingsC2SPacketMixin"
   ],
-  "client": [
+  "mixins": [
   ],
   "injectors": {
     "defaultRequire": 1

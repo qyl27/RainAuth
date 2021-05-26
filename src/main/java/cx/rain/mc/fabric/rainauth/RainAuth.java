@@ -3,18 +3,7 @@ package cx.rain.mc.fabric.rainauth;
 import cx.rain.mc.fabric.rainauth.command.Commands;
 import cx.rain.mc.fabric.rainauth.data.ConfigManager;
 import cx.rain.mc.fabric.rainauth.event.Events;
-import cx.rain.mc.fabric.rainauth.event.callback.PlayerLeaveCallback;
-import cx.rain.mc.fabric.rainauth.event.callback.PlayerLoginCallback;
-import cx.rain.mc.fabric.rainauth.event.callback.PlayerMoveCallback;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.player.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Style;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.TypedActionResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class RainAuth implements ModInitializer {
-    public static final String MODID = "RainAuth";
+    public static final String MODID = "rainauth";
 
     private static RainAuth INSTANCE;
 
@@ -38,7 +27,7 @@ public final class RainAuth implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        log.info("I am working.");
+        log.info("Loading...");
         new Commands();
         new Events();
     }

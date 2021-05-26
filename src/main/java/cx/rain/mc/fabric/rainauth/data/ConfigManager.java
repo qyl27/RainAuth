@@ -94,7 +94,7 @@ public class ConfigManager {
 
     private String hashPassword(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest((password + config.Salt).getBytes());
             return DatatypeConverter.printHexBinary(digest).toLowerCase();
         } catch (NoSuchAlgorithmException ignored) {
