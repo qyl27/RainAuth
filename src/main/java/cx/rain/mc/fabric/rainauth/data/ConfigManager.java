@@ -3,17 +3,11 @@ package cx.rain.mc.fabric.rainauth.data;
 import com.google.gson.Gson;
 import cx.rain.mc.fabric.rainauth.data.bean.BeanConfig;
 import cx.rain.mc.fabric.rainauth.data.bean.BeanData;
-import cx.rain.mc.fabric.rainauth.data.bean.BeanUser;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class ConfigManager {
     private final Gson gson = new Gson();
@@ -21,15 +15,12 @@ public class ConfigManager {
     private BeanConfig config;
     private final File configFile = new File("data/rainmods/rainauth/config.json");
 
-    private BeanData data;
-    private final File dataFile = new File("data/rainmods/rainauth/data.json");
-
     public ConfigManager() {
         try {
             internalInit();
         } catch (IOException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Cannot init auth data.");
+            throw new RuntimeException("Cannot init config.");
         }
     }
 
@@ -40,7 +31,7 @@ public class ConfigManager {
             }
 
             if (!configFile.createNewFile()) {
-                throw new RuntimeException("Cannot create config file.");
+                throw new RuntimeException("Cannot create data file.");
             }
 
             config = new BeanConfig();
@@ -54,28 +45,6 @@ public class ConfigManager {
             config = gson.fromJson(reader, BeanConfig.class);
             reader.close();
         }
-
-        if (!dataFile.exists()) {
-            if (!dataFile.getParentFile().exists()) {
-                dataFile.getParentFile().mkdirs();
-            }
-
-            if (!dataFile.createNewFile()) {
-                throw new RuntimeException("Cannot create data file.");
-            }
-
-            data = new BeanData();
-            data.Users = new ArrayList<>();
-
-            FileWriter writer = new FileWriter(dataFile);
-            writer.write(gson.toJson(data));
-            writer.flush();
-            writer.close();
-        } else {
-            FileReader reader = new FileReader(dataFile);
-            data = gson.fromJson(reader, BeanData.class);
-            reader.close();
-        }
     }
 
     private void saveConfig() throws IOException {
@@ -85,43 +54,15 @@ public class ConfigManager {
         writer.close();
     }
 
-    private void saveData() throws IOException {
-        FileWriter writer = new FileWriter(dataFile);
-        writer.write(gson.toJson(data));
-        writer.flush();
-        writer.close();
-    }
-
-    private String hashPassword(String password) {
+    public void save() {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] digest = md.digest((password + config.Salt).getBytes());
-            return DatatypeConverter.printHexBinary(digest).toLowerCase();
-        } catch (NoSuchAlgorithmException ignored) {
-            return null;
-        }
-    }
-
-    public boolean hasRegistered(String name, UUID uuid) {
-        for (BeanUser u : data.Users) {
-            if (u.Uuid == uuid) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void register(String name, UUID uuid, String password) {
-        try {
-            BeanUser user = new BeanUser();
-            user.Username = name;
-            user.Uuid = uuid;
-            user.PasswordSalt = config.Salt;
-            user.PasswordHashed = hashPassword(password);
-            data.Users.add(user);
-            saveData();
+            saveConfig();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public BeanConfig getConfig() {
+        return config;
     }
 }

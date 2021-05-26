@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class TranslatableLanguage extends Language {
+    private static TranslatableLanguage INSTANCE;
+
     private Map<String, String> map;
 
     public TranslatableLanguage(String localeIn) {
@@ -30,6 +32,13 @@ public class TranslatableLanguage extends Language {
         }
 
         map = builder.build();
+    }
+
+    public static TranslatableLanguage get() {
+        if (INSTANCE == null) {
+            INSTANCE = new TranslatableLanguage(RainAuth.getInstance().getConfigManager().getConfig().getLanguage());
+        }
+        return INSTANCE;
     }
 
     @Override

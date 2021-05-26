@@ -4,5 +4,5 @@
   "message.rainauth.not_player": "Only player can do it.",
   "message.rainauth.not_login": "Input /login <password> to login.",
   "message.rainauth.not_register": "Input /register <password> <repeat password> to register.",
-  "message.rainauth.same_uuid_logged": "Player with same uuid is logged!"
+  "message.rainauth.same_username_logged": "Player with same username is logged!"
 }

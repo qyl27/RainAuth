@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '0.6-SNAPSHOT'
     id 'maven-publish'
+    //id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -11,7 +12,7 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven { url "https://maven.shedaniel.me/" }
+    mavenCentral()
 }
 
 dependencies {
@@ -22,6 +23,8 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    //implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
@@ -57,6 +60,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
     from "LICENSE"
+    //finalizedBy(shadowJar)
 }
 
 // configure the maven publication
