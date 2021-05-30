@@ -1,4 +1,5 @@
 {
+  "title.rainauth.auth": "Sign up or sign in",
   "message.rainauth.already_registered": "Already registered.",
   "message.rainauth.not_repeat": "Password and repeat not match.",
   "message.rainauth.not_player": "Only player can do it.",

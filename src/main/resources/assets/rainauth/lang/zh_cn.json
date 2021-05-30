@@ -1,4 +1,5 @@
 {
+  "title.rainauth.auth": "注册或登录",
   "message.rainauth.already_registered": "同样的UUID已经注册了。",
   "message.rainauth.not_repeat": "两次输入的密码不一致。",
   "message.rainauth.not_player": "只有玩家可以这样做。",
