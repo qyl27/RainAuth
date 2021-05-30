@@ -16,22 +16,23 @@ public class CommandRegister {
     public CommandRegister(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralCommandNode<ServerCommandSource> reg =
                 dispatcher.register(literal("reg")
-                        .then(argument("password", PasswordArgumentType.password())
-                                .then(argument("repeat_password", PasswordArgumentType.password())
+                        .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("password", StringArgumentType.string())
+                                .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("repeat_password", StringArgumentType.string())
                                         .executes(this::register))));
 
         LiteralCommandNode<ServerCommandSource> register =
                 dispatcher.register(literal("register")
-                        .then(argument("password", PasswordArgumentType.password())
-                                .then(argument("repeat_password", PasswordArgumentType.password())
+                        .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("password", StringArgumentType.string())
+                                .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("repeat_password", StringArgumentType.string())
                                         .executes(this::register))));
 
         LiteralCommandNode<ServerCommandSource> forceRegister =
                 dispatcher.register(literal("register")
-                        .then(argument("name", StringArgumentType.string())
-                                .then(argument("password", PasswordArgumentType.password())
-                                        .then(argument("repeat_password", PasswordArgumentType.password())
-                                                .executes(this::registerForce)))));
+                        .requires((ctx) -> ctx.hasPermissionLevel(2))
+                            .then(argument("name", StringArgumentType.string())
+                                    .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("password", StringArgumentType.string())
+                                            .then(PasswordArgumentBuilder.<ServerCommandSource, String>create("repeat_password", StringArgumentType.string())
+                                                    .executes(this::registerForce)))));
     }
 
     public int register(CommandContext<ServerCommandSource> context) {

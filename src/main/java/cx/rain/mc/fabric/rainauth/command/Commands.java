@@ -7,9 +7,6 @@ import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 
 public class Commands {
     public Commands() {
-        ArgumentTypes.register(RainAuth.MODID + ":password", PasswordArgumentType.class,
-                new ConstantArgumentSerializer<>(PasswordArgumentType::password));
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> new CommandRegister(dispatcher));
+        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> new CommandRegister(dispatcher));
     }
 }
